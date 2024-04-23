@@ -253,7 +253,6 @@ window.addEventListener('DOMContentLoaded' , () =>{
             formData.forEach((value,key) => {
                 obj[key] = value;
             })
-            console.log(obj);
 
             fetch('server.php', {
                 method: 'POST',
@@ -299,5 +298,4 @@ window.addEventListener('DOMContentLoaded' , () =>{
         }, 2000)
     };
 
-    
 });
