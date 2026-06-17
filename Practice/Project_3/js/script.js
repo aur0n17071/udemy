@@ -99,4 +99,46 @@ function setClock(selector, endTime){
 
 setClock('.timer' , deadline);
 
+// MODAL
+
+const modalBtn = document.querySelectorAll('[data-modal-btn]'),
+      modal = document.querySelector('.modal'),
+      modalCloseBtn = modal.querySelector('.modal__close'),
+      modalTimerId = setTimeout(modalOpen, 2000);
+
+    modalBtn.forEach(e => e.addEventListener('click', modalOpen));
+
+    modal.addEventListener('click', e => {
+        if (e.target == modal || e.target == modalCloseBtn) {
+            modalClose();
+        }
+    })
+
+    document.body.addEventListener('keydown', e => {
+        if (e.key == 'Escape' && modal.classList.contains('show')){
+            modalClose();
+        }
+        
+    })
+
+    function modalOpen(){
+        modal.classList.toggle('show');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    }
+
+    function modalClose(){
+        modal.classList.toggle('show');
+        document.body.style.overflow = '';
+    }
+
+    function modalShowByScroll(){
+        //проверка что пользователь долистал до конца страницы (видимая часть + проскроленная равна полной высоте документа)
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1){
+            modalOpen();
+            window.removeEventListener('scroll', modalShowByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', modalShowByScroll);
 })
