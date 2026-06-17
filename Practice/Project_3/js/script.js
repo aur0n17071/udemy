@@ -124,7 +124,7 @@ const modalBtn = document.querySelectorAll('[data-modal-btn]'),
     function modalOpen(){
         modal.classList.toggle('show');
         document.body.style.overflow = 'hidden';
-        clearInterval(modalTimerId);
+        // clearInterval(modalTimerId);
     }
 
     function modalClose(){
@@ -210,5 +210,53 @@ class MenuCard {
         '.menu .container',
         'menu__item'
     ).render();
+
+    // SERVER SEND SCRIPT
+    const forms = document.querySelectorAll('form');
+
+    const message = {
+            loading: 'Загрузка',
+            success: 'Спасибо! Скоро мы с вами свяжемся',
+            failure: "Произошла ошибка"
+          }
+    
+    forms.forEach(el => postData(el));
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest(),
+                  formData = new FormData(form),
+                  obj = {};
+            
+            formData.forEach((el,i) => obj[i] = el);
+
+            const json = JSON.stringify(obj);
+            
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-type', 'application/json');
+            request.send(json);
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                    form.reset();
+                    setTimeout(() => statusMessage.remove(), 2000);
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            })
+
+        })
+    }
+
+    
 
 })
