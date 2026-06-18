@@ -102,14 +102,14 @@ setClock('.timer' , deadline);
 // MODAL
 
 const modalBtn = document.querySelectorAll('[data-modal-btn]'),
-      modal = document.querySelector('.modal'),
-      modalCloseBtn = modal.querySelector('.modal__close');
+      modal = document.querySelector('.modal');
+    //   modalCloseBtn = modal.querySelector('.modal__close'); УДАЛИЛ
     //   modalTimerId = setTimeout(modalOpen, 2000);
 
     modalBtn.forEach(e => e.addEventListener('click', modalOpen));
 
     modal.addEventListener('click', e => {
-        if (e.target == modal || e.target == modalCloseBtn) {
+        if (e.target === modal || e.target.getAttribute('data-close') == '') {
             modalClose();
         }
     })
@@ -122,13 +122,15 @@ const modalBtn = document.querySelectorAll('[data-modal-btn]'),
     })
 
     function modalOpen(){
-        modal.classList.toggle('show');
+        modal.classList.remove('hide');
+        modal.classList.add('show');
         document.body.style.overflow = 'hidden';
         // clearInterval(modalTimerId);
     }
 
     function modalClose(){
-        modal.classList.toggle('show');
+        modal.classList.remove('show');
+        modal.classList.add('hide');
         document.body.style.overflow = '';
     }
 
@@ -211,11 +213,12 @@ class MenuCard {
         'menu__item'
     ).render();
 
-    // SERVER SEND SCRIPT
+
+    // SERVER SEND SCRIPT AND MODAL UPDATE
     const forms = document.querySelectorAll('form');
 
     const message = {
-            loading: 'Загрузка',
+            loading: 'img/modal/spinner.svg',
             success: 'Спасибо! Скоро мы с вами свяжемся',
             failure: "Произошла ошибка"
           }
@@ -226,10 +229,13 @@ class MenuCard {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.loading;
-            form.append(statusMessage);
+            const statusMessage = document.createElement('img');
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `
+            form.parentElement.append(statusMessage);
 
             const request = new XMLHttpRequest(),
                   formData = new FormData(form),
@@ -246,17 +252,39 @@ class MenuCard {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = message.success;
+                    showThanksModal(message.success);
                     form.reset();
-                    setTimeout(() => statusMessage.remove(), 2000);
+                    statusMessage.remove();
                 } else {
-                    statusMessage.textContent = message.failure;
+                    showThanksModal(message.failure);
                 }
             })
 
         })
     }
 
-    
+    function showThanksModal(message){
+        const prevModalDialog = document.querySelector('.modal__dialog');
+        
+        prevModalDialog.classList.add('hide');
+        modalOpen();
 
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+        <div class="modal__content">
+            <div class="modal__close" data-close>&times;</div>
+            <div class="modal__title">${message}</div>
+        </div>
+        `;
+
+        document.querySelector('.modal').append(thanksModal);
+        setTimeout(() => {
+            thanksModal.remove();
+            prevModalDialog.classList.add('show');
+            prevModalDialog.classList.remove('hide');
+            modalClose();
+        }, 3000)
+    }
+    
 })
