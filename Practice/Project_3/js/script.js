@@ -236,29 +236,35 @@ class MenuCard {
                 margin: 0 auto;
             `
             form.parentElement.append(statusMessage);
-
-            const request = new XMLHttpRequest(),
-                  formData = new FormData(form),
-                  obj = {};
             
+            const formData = new FormData(form);
+
+            const obj = {};
             formData.forEach((el,i) => obj[i] = el);
-
-            const json = JSON.stringify(obj);
             
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json');
-            request.send(json);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset();
-                    statusMessage.remove();
-                } else {
-                    showThanksModal(message.failure);
-                }
+            fetch('server.php', {
+                method: 'POST',
+                headers : {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(obj)
             })
+            .then(data => {
+                return data.text()
+            })
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove();
+            })
+            .catch(() => {
+                showThanksModal(message.failure);
+            })
+            .finally(() => {
+                form.reset();
+
+            })
+
 
         })
     }
