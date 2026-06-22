@@ -2,9 +2,9 @@
 
 window.addEventListener('DOMContentLoaded', () => {
     // TABS
-        const tabs = document.querySelectorAll('.tabheader__item'),
-            tabsWrap = document.querySelector('.tabheader__items'),
-            tabContent = document.querySelectorAll('.tabcontent')
+    const tabs = document.querySelectorAll('.tabheader__item'),
+        tabsWrap = document.querySelector('.tabheader__items'),
+        tabContent = document.querySelectorAll('.tabcontent');
 
     function hideTabContent(){
         tabContent.forEach(el => {
@@ -293,6 +293,43 @@ window.addEventListener('DOMContentLoaded', () => {
             modalClose();
         }, 3000)
     }
+
+    // SLIDER
+    const sliderCounter = document.querySelector('.offer__slider-counter'),
+          sliderCurrent = sliderCounter.querySelector('#current'),
+          sliderTotal = sliderCounter.querySelector('#total'),
+          sliderContainer = document.querySelector('.offer__slider-wrapper'),
+          sliderSlides = sliderContainer.querySelectorAll('.offer__slide');
+    let slideIndex = 1;
+
+    function slideStart () {
+        sliderTotal.textContent = sliderSlides.length < 9 ? `0${sliderSlides.length}` : sliderSlides.length;
+        slideShow(slideIndex);
+    }
+
+    function slideShow (i){
+        slideIndex = i;
+        if (i <= 0) slideIndex = sliderSlides.length;
+        if (i > sliderSlides.length) slideIndex = 1;
+        sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
+        sliderSlides.forEach((el,index) => {
+            if (index !== slideIndex - 1) {
+                el.classList.add('hide')
+            } else {
+                el.classList.remove('hide')
+            }
+        })
+    }
+
+    sliderCounter.addEventListener('click', (e) => {
+
+        if (e.target.classList.contains('offer__slider-prev')) slideShow(slideIndex - 1);
+        if (e.target.classList.contains('offer__slider-next')) slideShow(slideIndex + 1);
+    })
+
+    slideStart()
+
+
 
 
 });
