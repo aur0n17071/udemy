@@ -1,5 +1,11 @@
 # FOLDERS
 test/
+/node_modules
+Practice/Project_3/node_modules
+
+#Files
+/.pnp
+.pnp.js
 
 # Logs
 logs
