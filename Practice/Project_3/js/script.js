@@ -298,37 +298,95 @@ window.addEventListener('DOMContentLoaded', () => {
     const sliderCounter = document.querySelector('.offer__slider-counter'),
           sliderCurrent = sliderCounter.querySelector('#current'),
           sliderTotal = sliderCounter.querySelector('#total'),
-          sliderContainer = document.querySelector('.offer__slider-wrapper'),
-          sliderSlides = sliderContainer.querySelectorAll('.offer__slide');
-    let slideIndex = 1;
+          sliderPrev = sliderCounter.querySelector('.offer__slider-prev'),
+          sliderNext = sliderCounter.querySelector('.offer__slider-next'),
+          sliderWrapper = document.querySelector('.offer__slider-wrapper'),
+          sliderSlides = sliderWrapper.querySelectorAll('.offer__slide'),
+          sliderInner = sliderWrapper.querySelector('.offer__slider-inner'),
+          width = parseInt(window.getComputedStyle(sliderWrapper).width);
 
+    let slideIndex = 1,
+        offset = 0;
+
+
+    //SLIDER VER 2
     function slideStart () {
-        sliderTotal.textContent = sliderSlides.length < 9 ? `0${sliderSlides.length}` : sliderSlides.length;
-        slideShow(slideIndex);
-    }
-
-    function slideShow (i){
-        slideIndex = i;
-        if (i <= 0) slideIndex = sliderSlides.length;
-        if (i > sliderSlides.length) slideIndex = 1;
+        sliderTotal.textContent = sliderSlides.length <= 9 ? `0${sliderSlides.length}` : sliderSlides.length;
         sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
-        sliderSlides.forEach((el,index) => {
-            if (index !== slideIndex - 1) {
-                el.classList.add('hide')
-            } else {
-                el.classList.remove('hide')
-            }
+
+        sliderSlides.forEach(e => {
+            e.style.width = width;
         })
+
+        sliderWrapper.style.overflow = 'hidden';
+
+        sliderInner.style.cssText = `
+        display: flex;
+        width: ${sliderSlides.length * 100}%;
+        transition: all 0.5s ease;
+        `;
+
     }
 
-    sliderCounter.addEventListener('click', (e) => {
+    slideStart();
 
-        if (e.target.classList.contains('offer__slider-prev')) slideShow(slideIndex - 1);
-        if (e.target.classList.contains('offer__slider-next')) slideShow(slideIndex + 1);
+    sliderNext.addEventListener('click', () => {
+        
+        if (offset == width * (sliderSlides.length - 1)) {
+            offset = 0;
+            slideIndex = 1;
+        } else {
+            offset += width;
+            slideIndex++;
+        }
+
+        sliderInner.style.transform = `translateX(-${offset}px)`;   
+        sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
     })
 
-    slideStart()
+    sliderPrev.addEventListener('click', () => {
+        
+        if (offset == 0) {
+            offset = width * (sliderSlides.length - 1);
+            slideIndex = sliderSlides.length;
+        } else {
+            offset -= width;
+            slideIndex--;
+        }
+        
+        sliderInner.style.transform = `translateX(-${offset}px)`;   
+        sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
+    })
 
+    //SLIDER VER 1
+    // function slideStart () {
+    //     sliderTotal.textContent = sliderSlides.length <= 9 ? `0${sliderSlides.length}` : sliderSlides.length;
+    //     slideShow(slideIndex);
+    // }
+
+    // function slideShow (i){
+    //     slideIndex = i;
+    //     if (i <= 0) slideIndex = sliderSlides.length;
+    //     if (i > sliderSlides.length) slideIndex = 1;
+    //     sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
+    //     sliderSlides.forEach((el,index) => {
+    //         if (index !== slideIndex - 1) {
+    //             el.classList.add('hide')
+    //         } else {
+    //             el.classList.remove('hide')
+    //         }
+    //     })
+    // }
+
+    // sliderCounter.addEventListener('click', (e) => {
+
+    //     if (e.target.classList.contains('offer__slider-prev')) slideShow(slideIndex - 1);
+    //     if (e.target.classList.contains('offer__slider-next')) slideShow(slideIndex + 1);
+    // })
+
+    // slideStart()
+
+    
 
 
 
