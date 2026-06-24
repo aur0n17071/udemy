@@ -398,34 +398,79 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // CALCULATOR
+    const calcResult = document.querySelector('.calculating__result span');
+    let sex = 'female', 
+    height, weight, age, 
+    ratio = 1.375;
+
+    function calculatorTotal(){
+        if (!sex || !height || !weight || !age || !ratio){
+            calcResult.textContent = '____';
+            return;
+        } else {
+            console.log(sex, height, weight, age, ratio);
+            if (sex == 'female') {
+                calcResult.textContent = Math.round(447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age) * ratio);
+            } else {
+                calcResult.textContent = Math.round(88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age) * ratio)
+            }
+        }
+    }
+
+    calculatorTotal();
+
+    function calculatorStaticInfo(parentElement, activeClass){
+        const elements = document.querySelectorAll(`${parentElement} div`);
+
+        elements.forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (parentElement == '#gender') {
+                    sex = e.target.getAttribute('id');
+                } else {
+                    ratio = +e.target.getAttribute('data-ratio')
+                }
+
+                elements.forEach(el => {
+                    el.classList.remove(activeClass);
+                });
+                
+                e.target.classList.add(activeClass);
+
+                calculatorTotal();
+            });
+        });
+
+        
+    }
+
+    calculatorStaticInfo('#gender','calculating__choose-item_active')
+    calculatorStaticInfo('.calculating__choose_big','calculating__choose-item_active')
+
+    function calculatorDynamicInfo(){
+        const element = document.querySelector('.calculating__choose_medium');
+            
+            element.addEventListener('input', (e) => {
+                switch(e.target.getAttribute('id')) {
+                    case'height' :
+                        height = +e.target.value;
+                        break;
+                    case'weight' :
+                        weight = +e.target.value;
+                        break;
+                    case'age' :
+                        age = +e.target.value;
+                        break;
+                }
+                
+                calculatorTotal();
+            });
+    }
+
+    calculatorDynamicInfo();
+
+
+
 
 });
 
-
-    //SLIDER VER 1
-    // function slideStart () {
-    //     sliderTotal.textContent = sliderSlides.length <= 9 ? `0${sliderSlides.length}` : sliderSlides.length;
-    //     slideShow(slideIndex);
-    // }
-
-    // function slideShow (i){
-    //     slideIndex = i;
-    //     if (i <= 0) slideIndex = sliderSlides.length;
-    //     if (i > sliderSlides.length) slideIndex = 1;
-    //     sliderCurrent.textContent = slideIndex <= 9 ? `0${slideIndex}` : slideIndex;
-    //     sliderSlides.forEach((el,index) => {
-    //         if (index !== slideIndex - 1) {
-    //             el.classList.add('hide')
-    //         } else {
-    //             el.classList.remove('hide')
-    //         }
-    //     })
-    // }
-
-    // sliderCounter.addEventListener('click', (e) => {
-
-    //     if (e.target.classList.contains('offer__slider-prev')) slideShow(slideIndex - 1);
-    //     if (e.target.classList.contains('offer__slider-next')) slideShow(slideIndex + 1);
-    // })
-
-    // slideStart()
