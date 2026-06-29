@@ -45,6 +45,11 @@
       "name": "qweqwe",
       "phone": "1",
       "id": "RDbMXaTLCw4"
+    },
+    {
+      "name": "asd",
+      "phone": "123",
+      "id": "GZoqy8TMgEI"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
