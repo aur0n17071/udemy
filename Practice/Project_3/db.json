@@ -50,6 +50,31 @@
       "name": "asd",
       "phone": "123",
       "id": "GZoqy8TMgEI"
+    },
+    {
+      "name": "asd",
+      "phone": "111",
+      "id": "7oMHCY965Co"
+    },
+    {
+      "name": "qwe",
+      "phone": "333",
+      "id": "e63GB3168xg"
+    },
+    {
+      "name": "qqq",
+      "phone": "55",
+      "id": "LwgPmwx1O7k"
+    },
+    {
+      "name": "qweqwe",
+      "phone": "123123",
+      "id": "x4G8ND45BD0"
+    },
+    {
+      "name": "q",
+      "phone": "5",
+      "id": "ayYK3PsBTHo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

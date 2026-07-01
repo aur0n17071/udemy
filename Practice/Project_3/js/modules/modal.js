@@ -1,43 +1,43 @@
-function modal(){
-    // MODAL
+function modalOpen(modalSelector, modalTimerId){
+    modal = document.querySelector(modalSelector);
+    modal.classList.remove('hide');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    // clearInterval(modalTimerId);
+}
 
-    const modalBtn = document.querySelectorAll('[data-modal-btn]'),
-      modal = document.querySelector('.modal');
-    //   modalCloseBtn = modal.querySelector('.modal__close'); УДАЛИЛ
-    //   modalTimerId = setTimeout(modalOpen, 2000);
+function modalClose(modalSelector){
+    modal = document.querySelector(modalSelector);
+    modal.classList.remove('show');
+    modal.classList.add('hide');
+    document.body.style.overflow = '';
+}
 
-    modalBtn.forEach(e => e.addEventListener('click', modalOpen));
+function modal(triggerSelector, modalSelector, modalTimerId){
+
+    const modalBtn = document.querySelectorAll(triggerSelector),
+          modal = document.querySelector(modalSelector);
+
+
+    modalBtn.forEach(e => e.addEventListener('click', () => modalOpen(modalSelector, modalTimerId)));
 
     modal.addEventListener('click', e => {
         if (e.target === modal || e.target.getAttribute('data-close') == '') {
-            modalClose();
+            modalClose(modalSelector);
         }
     })
 
     document.body.addEventListener('keydown', e => {
         if (e.key == 'Escape' && modal.classList.contains('show')){
-            modalClose();
+            modalClose(modalSelector);
         }
         
     })
 
-    function modalOpen(){
-        modal.classList.remove('hide');
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        // clearInterval(modalTimerId);
-    }
-
-    function modalClose(){
-        modal.classList.remove('show');
-        modal.classList.add('hide');
-        document.body.style.overflow = '';
-    }
-
     function modalShowByScroll(){
         //проверка что пользователь долистал до конца страницы (видимая часть + проскроленная равна полной высоте документа)
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1){
-            modalOpen();
+            modalOpen(modalSelector, modalTimerId);
             window.removeEventListener('scroll', modalShowByScroll);
         }
     }
@@ -45,4 +45,6 @@ function modal(){
     window.addEventListener('scroll', modalShowByScroll);
 }
 
-module.exports = modal;
+export default modal;
+export {modalClose};
+export {modalOpen};

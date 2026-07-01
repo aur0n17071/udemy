@@ -102,4 +102,4 @@ function calc(){
     calculatorDynamicInfo();
 }
 
-module.exports = calc;
+export default calc;
