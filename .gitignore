@@ -1,6 +1,6 @@
 # FOLDERS
 test/
-/node_modules
+node_modules/
 Practice/Project_3/node_modules
 
 #Files
